@@ -1,4 +1,4 @@
-﻿#include <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #define _USE_MATH_DEFINES
 #include <math.h>
@@ -76,7 +76,7 @@ float pair_sum(float* terms, int n)
 
 void filling(float* terms, int n, int func, float x,
     float* direct_fx, float* reverse_fx,
-    float* pair_fx, float* expected_res)
+    float* pair_fx, double* expected_res)
 {
     if (func == 1) {
         sinx(terms, n, x);
@@ -103,30 +103,43 @@ void filling(float* terms, int n, int func, float x,
 int main()
 {
     int n, func;
-    float x, direct_fx, reverse_fx, pair_fx, expected_res;
+    float x, direct_fx, reverse_fx, pair_fx;
+    double expected_res;
+    char end = 'r';
+    while (end != 'e')
+    {
+        printf("Select function:\n");
+        printf("1. sinx\n");
+        printf("2. cosx\n");
+        printf("3. ln(1+x)\n");
+        printf("4. e^x\n");
+        scanf_s("%d", &func);
 
-    printf("Select function:\n");
-    printf("1. sinx\n");
-    printf("2. cosx\n");
-    printf("3. ln(1+x)\n");
-    printf("4. e^x\n");
-    scanf_s("%d", &func);
+        printf("Enter number of elements\n");
+        scanf_s("%d", &n);
 
-    printf("Enter number of elements\n");
-    scanf_s("%d", &n);
+        if (n <= 0)
+        {
+            printf("Incorrect 'n'. Program ends.");
+            break;
+        }
 
-    printf("Enter x for function\n");
-    scanf_s("%f", &x);
-    float* terms = (float*)malloc(sizeof(float) * n);
-    filling(terms, n, func, x, &direct_fx, &reverse_fx, &pair_fx, &expected_res);
+        printf("Enter x for function\n");
+        scanf_s("%f", &x);
+        float* terms = (float*)malloc(sizeof(float) * n);
+        filling(terms, n, func, x, &direct_fx, &reverse_fx, &pair_fx, &expected_res);
 
-    printf("\nResults:\n");
-    printf("Direct summation:  %f\n", direct_fx);
-    printf("Reverse summation: %f\n", reverse_fx);
-    printf("Pair summation:    %f\n", pair_fx);
-    printf("Expected result:   %f\n", expected_res);
-    printf("Max difference:    %f\n", fmaxf(fmaxf(fabs(expected_res - direct_fx), fabs(expected_res - reverse_fx)), fabs(expected_res - pair_fx)));
+        printf("\nResults:\n");
+        printf("Direct summation:  %f\n", direct_fx);
+        printf("Reverse summation: %f\n", reverse_fx);
+        printf("Pair summation:    %f\n", pair_fx);
+        printf("Expected result:   %f\n", expected_res);
+        printf("Max difference:    %f\n", fmaxf(fmaxf(fabs(expected_res - direct_fx), fabs(expected_res - reverse_fx)), fabs(expected_res - pair_fx)));
 
-    free(terms);
+        free(terms);
+
+        printf("End or repeat program? (e/r)\n");
+        scanf_s(" %c", &end);
+    }
     return 0;
 }
